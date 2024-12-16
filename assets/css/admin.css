@@ -1,0 +1,134 @@
+/* ---------------------------------------- */
+/* CSS cho trang đăng nhập admin */
+.login-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.login-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-form input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-form button {
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #555;
+}
+
+.error {
+  color: red;
+  margin-bottom: 15px;
+}
+
+/* CSS cho admin sidebar */
+.admin-sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  position: fixed;
+  top: 0;
+  left: -250px; /* Ẩn sidebar mặc định */
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar.active {
+  left: 0; /* Hiển thị sidebar khi có lớp active */
+}
+
+.sidebar-logo {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.sidebar-logo a {
+  color: #ecf0f1;
+  text-decoration: none;
+}
+
+.sidebar-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav ul li {
+  padding: 15px 20px;
+}
+
+.sidebar-nav ul li a {
+  color: #ecf0f1;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.sidebar-nav ul li a:hover {
+  background-color: #34495e;
+  border-radius: 4px;
+}
+
+/* CSS cho biểu tượng 3 sọc */
+.sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  color: #ecf0f1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    left: -100%; /* Ẩn sidebar trên di động */
+  }
+
+  .admin-sidebar.active {
+    left: 0;
+  }
+
+  .sidebar-nav ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-nav ul li {
+    padding: 10px 15px;
+  }
+}
