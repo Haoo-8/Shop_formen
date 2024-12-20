@@ -15,9 +15,5 @@
                 ?>
             </ul>
         </li>
-
-        <li><a href="contact.php">BLOG</a></li>
-        <li><a href="contact.php">SẢN XUÂT RIÊNG</a></li>
-        <li><a href="contact.php">CARE &amp; SHARE</a></li>
     </ul>
 </nav>

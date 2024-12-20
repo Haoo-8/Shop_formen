@@ -3,6 +3,7 @@ require_once 'config/config.php';
 require_once 'classes/Db.class.php';
 require_once 'classes/Product.class.php';
 require_once 'classes/Category.class.php';
+require_once 'includes/breadcrumb.php';
 
 // Kết nối database và khởi tạo các class
 $db = new Db();
@@ -30,7 +31,9 @@ $products = $product->getProductsByCategory($categoryId);
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
-
+    <?php
+        renderBreadcrumb();
+    ?>
     <main>
         <h1><?php echo htmlspecialchars($currentCategory['category_name']); ?></h1>
         <div class="product-list">

@@ -79,6 +79,11 @@ class User extends Db
         return $this->db->selectOne($sql, [$userId]);
     }
 
+    public function getUserInfoById($userId){
+        $sql = "SELECT * FROM users WHERE user_id =?";
+        return $this->db->fetch($sql, [$userId]);
+    }
+
     // Xóa người dùng
     public function deleteUser($userId)
     {
@@ -99,10 +104,11 @@ class User extends Db
         return $this->db->update($sql, [$status, $userId]);
     }
 
-    public function updateUserInfo($username, $email)
+    // Cập nhật thông tin người dùng
+    public function updateUserInfo($full_name, $phone_number, $address, $user_id)
     {
-        $sql = "UPDATE users SET email = ? WHERE username = ?";
-        return $this->db->update($sql, [$email, $username]);
+    $sql = "UPDATE users SET  fullname = ?, phone = ?, address = ? WHERE user_id = ?";
+        return $this->db->update($sql, ([$full_name, $phone_number, $address, $user_id]));
     }
 
 

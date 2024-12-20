@@ -5,6 +5,8 @@ require_once 'classes/Product.class.php';
 require_once 'classes/Category.class.php';
 require_once 'classes/Color.class.php';
 require_once 'classes/Size.class.php';
+require_once 'includes/breadcrumb.php';
+
 
 
 $db = new Db();
@@ -34,7 +36,6 @@ $categories = $category->getAllCategories();
     <?php
     include "includes/header.php";
     ?>
-
 
     <!-- Main Content Section -->
     <main class="main-content">
@@ -85,7 +86,9 @@ $categories = $category->getAllCategories();
                 setInterval(nextSlide, 5000); // Xóa dòng này nếu không muốn tự động
             });
         </script>
-
+        <?php
+        renderBreadcrumb();
+        ?>
         <!-- Categories Section -->
         <section class="categories">
             <h2>Danh Mục Sản Phẩm</h2>
@@ -122,49 +125,53 @@ $categories = $category->getAllCategories();
 
                                 <!-- Nút thao tác hiển thị khi hover -->
                                 <div class="product-actions">
-                                    <button class="btn-add-to-cart">
+                                    <button class="btn-add-to-cart" onclick="addToCart('<?php echo $productItem['product_id']; ?>', 1)">
                                         <i class="icon-cart"></i> Thêm vào giỏ
                                     </button>
+
                                     <button class="btn-view-details" onclick="openPopup('<?php echo $productId; ?>')">
                                         <i class="icon-eye"></i>
+                                        <img style="width: 30px; height: 30px;" src="assets/images/icons/eye.png" alt="icon_eyes">
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Popup chi tiết sản phẩm -->
+                        <div id="product-popup" class="popup-overlay">
+                            <div class="popup-content">
+                                <!-- Nút đóng popup -->
+                                <button class="popup-close" onclick="closePopup()">&times;</button>
+                                <div class="popup-container1">
+                                    <!-- Hình ảnh sản phẩm -->
+                                    <div class="popup-image">
+                                        <img id="popup-product-image" src="" alt="Sản phẩm">
+                                    </div>
+                                    <!-- Chi tiết sản phẩm -->
+                                    <div class="popup-details">
+                                        <h3 id="popup-product-name"></h3>
+                                        <p>Mã sản phẩm: <span id="popup-product-id"></span></p>
+                                        <p>Giá: <span id="popup-product-price"></span></p>
+                                        <p>
+                                            <strong>Màu sắc:</strong>
+                                        <div id="popup-product-colors" class="popup-options"></div>
+                                        </p>
+                                        <p>
+                                            <strong>Kích thước:</strong>
+                                        <div id="popup-product-sizes" class="popup-options"></div>
+                                        </p>
+                                        <!-- <input type="hidden" name="product_id" value="<?php echo $productItem['product_id']; ?>"> -->
+                                        <label for="quantity popup-quantity">Số lượng:</label>
+                                        <input type="number" name="quantity" id="quantity popup-quantity" min="1" value="1">
+                                        <button class="btn-add-to-cart" onclick="addToCart('<?php echo $productItem['product_id']; ?>', 1)">
+                                            <i class="icon-cart"></i> Thêm vào giỏ
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
 
-                    <!-- Popup chi tiết sản phẩm -->
-                    <div id="product-popup" class="popup-overlay">
-                        <div class="popup-content">
-                            <!-- Nút đóng popup -->
-                            <button class="popup-close" onclick="closePopup()">&times;</button>
-                            <div class="popup-container1">
-                                <!-- Hình ảnh sản phẩm -->
-                                <div class="popup-image">
-                                    <img id="popup-product-image" src="" alt="Sản phẩm">
-                                </div>
-                                <!-- Chi tiết sản phẩm -->
-                                <div class="popup-details">
-                                    <h3 id="popup-product-name"></h3>
-                                    <p>Mã sản phẩm: <span id="popup-product-id"></span></p>
-                                    <p>Giá: <span id="popup-product-price"></span></p>
-                                    <p>
-                                        <strong>Màu sắc:</strong>
-                                    <div id="popup-product-colors" class="popup-options"></div>
-                                    </p>
-                                    <p>
-                                        <strong>Kích thước:</strong>
-                                    <div id="popup-product-sizes" class="popup-options"></div>
-                                    </p>
-                                    <form action="module/order/cart.php" method="POST">
-                                        <label for="popup-quantity">Số lượng:</label>
-                                        <input type="number" name="quantity" id="popup-quantity" min="1" value="1">
-                                        <button type="submit" class="btn-add-to-cart">Thêm vào giỏ hàng</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <button class="next" onclick="nextSlide()">&#10095;</button>
                 <script>
@@ -227,12 +234,13 @@ $categories = $category->getAllCategories();
                             });
                     }
 
-
                     function closePopup() {
                         document.getElementById('product-popup').style.display = 'none';
                     }
                 </script>
         </section>
+
+
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const productsContainer = document.querySelector(".products-container");

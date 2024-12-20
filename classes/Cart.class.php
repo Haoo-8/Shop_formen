@@ -1,31 +1,71 @@
 <?php
-class Cart
-{
-    private $db;
 
-    public function __construct($db)
-    {
-        $this->db = $db;
-    }
-
-    // Thêm sản phẩm vào giỏ hàng
-    public function addToCart($userId, $productId, $quantity)
-    {
-        $existing = $this->db->select("SELECT * FROM cart WHERE user_id = ? AND product_id = ?", [$userId, $productId]);
-        if ($existing) {
-            $this->db->update("UPDATE cart SET quantity = quantity + ? WHERE user_id = ? AND product_id = ?", [$quantity, $userId, $productId]);
-        } else {
-            $this->db->insert("INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)", [$userId, $productId, $quantity]);
+class Cart extends Db{
+    public function __construct() {
+        // Kiểm tra nếu giỏ hàng chưa tồn tại
+        if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
         }
     }
 
-    // Lấy danh sách sản phẩm trong giỏ hàng
-    public function getCart($userId)
-    {
-        return $this->db->select("SELECT c.*, p.name, p.price, p.image_url 
-                                  FROM cart c 
-                                  JOIN products p ON c.product_id = p.product_id 
-                                  WHERE c.user_id = ?", [$userId]);
+    public function addToCart($productId, $quantity) {
+        if (isset($_SESSION['cart'][$productId])) {
+            $_SESSION['cart'][$productId] += $quantity;
+        } else {
+            $_SESSION['cart'][$productId] = $quantity;
+        }
     }
+
+    public function removeFromCart($productId) {
+        if (isset($_SESSION['cart'][$productId])) {
+            unset($_SESSION['cart'][$productId]);
+        }
+    }
+
+    public function updateCart($productId, $quantity) {
+        if ($quantity <= 0) {
+            $this->removeFromCart($productId);
+        } else {
+            $_SESSION['cart'][$productId] = $quantity;
+        }
+    }
+
+    public function getCartItems($productClass) {
+        $items = [];
+        foreach ($_SESSION['cart'] as $productId => $quantity) {
+            //Chú ý hàm getProductById2 ở đây sẽ trả về mảng khác với hàm trùng tên kia trả về select
+            $product = $productClass->getProductById2($productId);  
+            if ($product) {
+                $product['quantity'] = $quantity;
+                $items[] = $product;
+            }
+        }
+        return $items;
+    }
+
+    public function getTotalQuantity() {
+        return array_sum($_SESSION['cart']);
+    }
+
+    public function getTotalPrice($productClass) {
+        $total = 0;
+        foreach ($this->getCartItems($productClass) as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+        return $total;
+    }
+
+    public function clearCart() {
+        $_SESSION['cart'] = [];
+    }
+
+    public function getCartAsJson($productClass) {
+        $cartItems = $this->getCartItems($productClass);
+        return json_encode([
+            'items' => $cartItems,
+            'total_quantity' => $this->getTotalQuantity(),
+            'total_price' => $this->getTotalPrice($productClass)
+        ]);
+    }
+
 }
-?>

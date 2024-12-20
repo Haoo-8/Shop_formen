@@ -13,12 +13,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $role = isset($_POST['role']) ? $_POST['role'] : 'user';
     if (empty($username) || empty($password) || empty($phone) || empty($email)) {
         $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin.";
+
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error'] = "Email không hợp lệ.";
+        header('Location: ../../index.php');
+        exit; 
     } elseif ($user->checkUsernameExists($username)) {
         $_SESSION['error'] = "Tên đăng nhập đã tồn tại.";
+        header('Location: ../../index.php');
+        exit; 
     } elseif ($user->checkEmailExists($email)) {
         $_SESSION['error'] = "Email đã tồn tại.";
+        header('Location: ../../index.php');
+        exit; 
     } else {
         try {
             $user->register($username, $password, $email, $phone, $role );

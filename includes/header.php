@@ -68,10 +68,10 @@ if (isset($_GET['search']) && $_GET['search']) {
             <?php include 'navigation.php'?>
 
             <?php include 'search.php'?>
-            <?php include 'cart.php'?>
+            <?php include 'cart_icon.php'?>
             <nav class="nav-container__login">
                 <ul> <?php if (isset($_SESSION['username'])) { ?>
-                        <li><a href="module/auth/profile.php">Xin chào,
+                        <li><a href="module/profile/profile.php">Xin chào,
                                 <?php echo htmlspecialchars($_SESSION['username']); ?></a>
                         </li>
                         <li><a href="module/auth/logout.php">Đăng xuất</a></li>
